@@ -1,0 +1,10 @@
+{% extends "layouts/base.njk" %}
+{% set body_class = "" %}
+
+{% block body %}
+    <div class="main-wrap">
+        {% include 'layouts/_header.njk' %}
+        {% block content %}{% endblock %}
+
+    </div>
+{% endblock %}

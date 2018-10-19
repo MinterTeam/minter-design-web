@@ -1,0 +1,7 @@
+User-agent: *
+Disallow:
+
+
+User-agent: Yandex
+Disallow:
+Host: design.minter.network

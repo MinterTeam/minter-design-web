@@ -1,0 +1,43 @@
+{% set localePrefix = '' if __locale__ === 'en' else '/' + __locale__ %}
+{% set host = 'https://design.minter.network' %}
+
+<!doctype html>
+<html lang="{{ __locale__ }}">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    {# seo #}
+    <title>{{ page_title + " — Minter Network" if page_title else "Minter Network" }}</title>
+    <meta name="description" content="{{ page_description | default("We mint coins") }}">
+    <meta property="og:title" content="{{ page_title | default("Minter") }}">
+    <meta property="og:description" content="{{ page_description | default("We mint coins") }}">
+    <meta property="og:image" content="{{ page_social_image | default("/social-share" + ('-ru' if __locale__ === 'ru') + ".png") }}">
+    <link rel="icon" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="canonical" href="{{ host + localePrefix + __locationPath__ }}">
+    {% for code, locale in __locales__ %}
+        {% if locale.code !== __locale__ %}
+            <link rel="alternate" hreflang="{{ locale.code }}" href="{{ host + ('' if locale.code === 'en' else '/' + locale.code) + __locationPath__ }}" />
+        {% endif %}
+    {% endfor %}
+    {# styles #}
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:500,900i&amp;subset=cyrillic" rel="stylesheet">
+    <link href="/css/style.min.css" rel="stylesheet">
+</head>
+<body class="{{ body_class }}">
+{% block body %}{% endblock %}
+
+{% block scripts %}
+    <script src="/js/common.min.js"></script>
+{% endblock %}
+
+{% include 'layouts/_seo-gtm.njk' %}
+</body>
+</html>
+
+
+
+
+

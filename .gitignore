@@ -1,0 +1,13 @@
+/public/*.html
+/public/cn/
+/public/ru/
+/public/ps/
+/public/bot/
+/public/css
+/public/js
+/public/img
+/tmp
+.env
+
+
+node_modules

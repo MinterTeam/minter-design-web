@@ -1,0 +1,203 @@
+// normalize-css подключается с помощью postcss-normalize
+@import (inline) '../node_modules/@material/menu/dist/mdc.menu.css';
+@import (inline) '../node_modules/@material/menu-surface/dist/mdc.menu-surface.css';
+@import (inline) '../node_modules/@material/list/dist/mdc.list.css';
+@import "include/variables";
+@import "include/utils";
+@import "include/general";
+@import "include/layout";
+
+
+
+
+// common
+.main-wrap {/*overflow: hidden;*/}
+.list-simple {
+    padding-left: 1em; line-height: 1.35;
+    li + li {margin-top: 0.625em;}
+}
+.hr--short {width: 40px; border-top: 4px solid; margin: @default-indent auto; color: inherit; border-color: #a24314;}
+.hr--left {margin-left: 0;}
+.hr--large-margin {margin-top: 32px; margin-bottom: 32px;}
+.u-section {padding-top: 60px; padding-bottom: 60px;}
+@media (min-width: @breakpoint-medium-up) {
+    .u-section {padding-top: 80px; padding-bottom: 80px;}
+}
+// common dropdown
+@dropdown-translate: 20px;
+@dropdown-transition: 0.175s;
+.dropdown {position: relative; z-index: 1;}
+.dropdown__content {
+    position: absolute; left: 0; top: 100%; right: 0; opacity: 0; transform: translateY(-@dropdown-translate); z-index: -1; pointer-events: none; transition: @dropdown-transition;
+    .is-active > & {opacity: 1; transform: translateY(0); pointer-events: auto;}
+}
+
+
+
+@keyframes fade-in {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+@keyframes slide-header-container {
+    0% {top: var(--header-top, 64px);}
+    100% {top: 0;}
+}
+@keyframes fade-out {
+    0% {opacity: 1;}
+    100% {opacity: 0;}
+}
+@keyframes slide-up {
+    0% {transform: translateY(30%);}
+    100% {transform: translateY(0);}
+}
+
+
+// header
+@header-height: 64px;
+@header-link-padding: ((@header-height - 20px) / 2);
+@header-language-padding: ((@header-height - 24px) / 2);
+@header-link-margin: 30px;
+@header-link-underline-height: 4px;
+.header-link-after() {content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; opacity: 0.4;}
+.header {box-shadow: 0 2px 5px rgba(0,0,0,0.1); background: #2c2c2c; color: #fff; width: 100%; position: relative; z-index: 10;}
+.header__container {display: flex; justify-content: space-between; align-items: center; top: 0; height: @header-height;}
+.header__logo {display: flex; align-items: center;}
+.header__logo-image {margin-right: 20px; font-size: 0;}
+.header__logo-text {font-size: 20px; line-height: 22px;}
+.header__controls {display: flex; align-items: center;}
+@media (min-width: @breakpoint-medium-up) {
+    .header__logo-text {font-size: 26px; line-height: 30px;}
+}
+
+// language
+.language-switch {margin-left: 24px;}
+.language-switch__button {font-size: 0; display: block; margin: -2px; padding: 2px; /* fix safari button overflow */}
+.language-switch__button-icon {box-shadow: 0 0 0 1.2px #fff; border-radius: 50%; background: #fff; will-change: transform; /* fix firefox odd width */}
+.language-switch__text {margin-right: 16px;}
+// кнопка вешает .menu- классы на body
+.header--menu-active {
+    &::after {content: ''; background: #0d263e; position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: -1; }
+    .header__menu {display: flex; padding-top: 10px; padding-bottom: 20px; order: 2; width: 100%;}
+}
+.header--menu-animate-in {
+    animation: slide-header-container both 0.25s;
+    &::after {animation: fade-in both 0.25s;}
+    .header__menu {animation: fade-in both 0.4s 0.05s;}
+    .header__link {animation: slide-up both 0.25s 0.05s}
+    .header__link:nth-child(2) {animation-duration: 0.28s;}
+    .header__link:nth-child(3) {animation-duration: 0.31s;}
+    .header__link:nth-child(4) {animation-duration: 0.34s;}
+    .header__link:nth-child(5) {animation-duration: 0.37s;}
+    .header__link:nth-child(6) {animation-duration: 0.4s;}
+}
+.header--menu-animate-out {
+    animation: slide-header-container reverse both 0.2s;
+    &::after {animation: fade-out both 0.25s 0.1s;}
+    .header__menu {animation: fade-out both 0.2s;}
+}
+@menu-icon-size: 30px;
+@menu-icon-transition: .25s;
+@menu-icon-color: currentColor;
+.header__offcanvas-button {
+    display: block; width: @menu-icon-size; height: @menu-icon-size; position: relative; text-align: center; transition: 0.25s;
+    .is-modal-opened & {opacity: 0;}
+}
+.header__offcanvas-icon-wrap {width: 40px; height: 40px; position: absolute; left: 50%; top: 50%; margin-top: -20px; margin-left: -20px;}
+.header__offcanvas-icon {
+    transition: @menu-icon-transition; background: @menu-icon-color; position: absolute; height: 3px; width: @menu-icon-size; left: 50%; top: 50%; margin-left: -@menu-icon-size / 2; margin-top: -3px; font-size: 0;
+    &:before, &:after {transition: @menu-icon-transition cubic-bezier(0.175, 0.885, 0.32, 1.275); background: @menu-icon-color; height: 100%; width: 100%; content: ''; position: absolute; left: 0;}
+    &:before {top: 10px;}
+    &:after {top: -10px;}
+    .header__offcanvas-button.is-active & {
+        background-color: transparent;
+        &:before, &:after {transform-origin: 50% 50%; top: 0 !important;}
+        &:before {transform: rotate3d(0, 0, 1, 45deg);}
+        &:after {transform: rotate3d(0, 0, 1, -45deg);}
+    }
+}
+@media (min-width: @breakpoint-small-up) {
+    .header__logo {margin-right: 48px;}
+}
+@media (min-width: @breakpoint-large-up) {
+    .header__menu {
+        display: flex; flex-direction: row; flex-grow: 2;
+        && {animation: none;}
+    }
+    .header__link {
+        &::after {height: @header-link-underline-height; opacity: 0;}
+        &:hover::after, &:focus::after {opacity: 0.4;}
+        &.is-active::after {opacity: 1;}
+        &+& {margin-left: @header-link-margin;}
+    }
+
+    .header__offcanvas-button {display: none;}
+}
+
+
+// footer
+.footer {background: @c-blue; color: #fff; padding: 38px 0;}
+.footer--ps {background: none;}
+.footer__container {display: flex; justify-content: center; flex-wrap: wrap;}
+.footer__logo-link {}
+.footer__logo {width: 76px; display: block;}
+.footer__menu {width: 100%; margin: 20px 0 0; padding: 0; text-align: center;}
+.footer__menu-item {
+    font-size: 14px; font-weight: 700; display: inline-block;
+    &::after {content: ' | '; margin: 0 3px;}
+    &:last-child::after {content: none;}
+}
+@media (min-width: @breakpoint-large-up) {
+    .footer__container {align-items: center; justify-content: space-between;}
+    .footer__container--ps {justify-content: center;}
+    .footer__menu {width: auto; margin-top: 0;}
+}
+
+
+
+
+
+
+
+.article {overflow: hidden; padding: 60px 0;}
+
+.kit__logo-list {}
+.kit__logo-item {text-align: center; margin-top: 32px;}
+.kit__logo-layer {}
+.kit__logo-layer--white {
+    width: 300px; max-width: 100%; height: 98px; margin: auto; position: relative; z-index: 1; padding-left: 10px;
+    &::before {content: ''; position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: #fff; transform: skew(-10deg); z-index: -1;}
+}
+.kit__logo-image {margin-top: 9px; vertical-align: top;}
+.kit__logo-caption {font-size: 12px; /*line-height: 1.35;*/ margin-top: 20px;}
+.kit__logo-caption--first {margin-left: -10px;}
+@media (min-width: @breakpoint-large-up) {
+    .kit__logo-list {display: flex; justify-content: space-between;}
+    .kit__logo-layer {height: 112px;}
+    .kit__logo-image {width: 228px; height: 71px;}
+}
+
+
+.kit__row {
+    &+& {margin-top: 24px;}
+}
+.kit__color-wrap {
+    display: flex;
+    &+& {margin-top: 8px;}
+}
+.kit__color {box-shadow: 0 2px 2px rgba(0,0,0,0.5); height: 42px; flex-grow: 2;}
+.kit__color-content {width: 140px; margin-left: 24px; flex-shrink: 0; font-size: 12px;}
+
+
+.kit__typo {font-size: 16px; line-height: 22px;}
+.kit__typo--ubuntu-medium {}
+.kit__typo--ubuntu-bold {}
+
+.kit__typo--rubik-medium {font-family: @f-rubik; font-weight: 500; font-size: 20px; line-height: 24px;}
+.kit__typo--rubik-black {font-family: @f-rubik; font-weight: 900; font-style: italic; font-size: 20px; line-height: 24px;}
+.kit__typo--roboto {font-family: @f-roboto;}
+.kit__typo--roboto-medium {font-family: @f-roboto; font-weight: 500;}
+
+
+
+
+
